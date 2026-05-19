@@ -16,7 +16,9 @@
 */
 package com.damdamdeo.greeting.config.extension.it;
 
+import com.damdamdeo.greeting.config.extension.runtime.GreetingService;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 
@@ -25,8 +27,11 @@ import jakarta.ws.rs.Path;
 public class GreetingConfigExtensionResource {
     // add some rest methods here
 
+    @Inject
+    GreetingService greetingService;
+
     @GET
     public String hello() {
-        return "Hello greeting-config-extension";
+        return "Hello greeting-config-extension " + greetingService.initAtStartup();
     }
 }

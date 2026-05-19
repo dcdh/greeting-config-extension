@@ -1,23 +1,27 @@
 package com.damdamdeo.greeting.config.extension.test;
 
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import com.damdamdeo.greeting.config.extension.runtime.GreetingService;
+import io.quarkus.test.QuarkusUnitTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-
-import io.quarkus.test.QuarkusExtensionTest;
 
 public class GreetingConfigExtensionTest {
 
     // Start unit test with your extension loaded
     @RegisterExtension
-    static final QuarkusExtensionTest unitTest = new QuarkusExtensionTest()
-            .setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class));
+    static final QuarkusUnitTest unitTest = new QuarkusUnitTest()
+            .withEmptyApplication()
+            .overrideConfigKey("my.config.build-time-property", "BuiltTimePropertyRedefined")
+            .overrideRuntimeConfigKey("my.datasource.init-at-startup", "false");
+
+    @Inject
+    GreetingService greetingService;
 
     @Test
     public void writeYourOwnUnitTest() {
-        // Write your unit tests here - see the testing extension guide https://quarkus.io/guides/writing-extensions#testing-extensions for more information
-        Assertions.assertTrue(true, "Add some assertions to " + getClass().getName());
+        System.out.println("greetingService.initAtStartup(): " + greetingService.initAtStartup());
+        Assertions.assertFalse(greetingService.initAtStartup());
     }
 }

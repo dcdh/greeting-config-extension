@@ -16,6 +16,6 @@ public class GreetingConfigExtensionResourceTest {
                 .when().get("/greeting-config-extension")
                 .then()
                 .statusCode(200)
-                .body(is("Hello greeting-config-extension"));
+                .body(is("Hello greeting-config-extension false"));
     }
 }
